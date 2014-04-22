@@ -5,7 +5,7 @@
 		class WP_Geek_Options extends WP_Geek_Option_Page{
 		
 			public $args=array(
-					'menu_slug' => 'graphic_geek_admin',
+					'menu_slug' => 'wp_geek_admin',
 					'menu_type' => 'menu',
 					'page_title' => 'WordPress Geek Options'
 				);

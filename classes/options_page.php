@@ -9,7 +9,7 @@
 				$defaults = array(
 					'page_title' => 'Options',
 					'menu_type' => 'options',
-					'menu_title' => 'Graphic Geek',
+					'menu_title' => 'WordPress Geek',
 					'capability' => 'manage_options',
 					'parent_slug' => false,
 					'menu_slug' => false
