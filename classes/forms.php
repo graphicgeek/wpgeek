@@ -265,15 +265,15 @@
 						if($field['value']) {
 				            $img = wp_get_attachment_image_src( $field['value'], $field['thumbsize']);
 				            $return .= '<span class="wpg_delete">X</span>';
-				            $return .= '<img id="' . sanitize_html_class($field['name']) . '_img" class="custom_media_image" src="' . $img[0] . '" />';
+				            $return .= '<span id="' . $field['name'] . '_result"><img class="wpg_media_upload" src="' . $img[0] . '" /></span>';
 	            		} else { 
-	            			$return .= '<img id="' . sanitize_html_class($field['name']) . '_img" class="custom_media_image" src="" />';
+	            			$return .= '<span id="' . $field['name'] . '_result"></span>';
 	            		}//end if($field['value'])
 	
-			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name'] . '" id="' . sanitize_html_class($field['name']) . '_id" value="' . $field['value'] . '">';
+			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name'] . '" id="' . $field['name'] . '_id" value="' . $field['value'] . '">';
 		            	$return .= '</div>';            		
 	            		                    
-	        			$return .= '<button class="wpg_media_upload" type="button" id="' . sanitize_html_class($field['name']) . '" data-uploader_button_text="Set Photo" data-uploader_title="Select a Photo">Upload ' . strip_tags($field['label']) . '</button>';
+	        			$return .= '<button class="wpg_media_upload" type="button" id="' . $field['name'] . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image">Upload ' . strip_tags($field['label']) . '</button>';
         			
 					} else {
 						//for non-image uploads
