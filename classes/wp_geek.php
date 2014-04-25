@@ -7,6 +7,9 @@ if(!class_exists('WP_Geek')){
 
 		public static function init(){
 			add_action('plugins_loaded', array(self::instance(), 'add_actions'));
+			add_action('admin_init', array(self::instance(), 'register_admin_scripts'));
+			add_action('init', array(self::instance(), 'register_scripts'));
+			add_action('sidebar_admin_setup', array(self::instance(), 'widget_scripts'));
 		}
 	
 		public static function instance()
@@ -21,7 +24,7 @@ if(!class_exists('WP_Geek')){
 		}
 	
 		public function option($option){
-			if(!self::$options) { self::$options = get_option('gg_options'); }
+			if(!self::$options) { self::$options = get_option('wpg_options'); }
 		
 			if(!isset(self::$options[$option])){ return false; }
 			
@@ -34,16 +37,38 @@ if(!class_exists('WP_Geek')){
 				echo '<link rel="Shortcut Icon" type="image/x-icon" href="'. wp_get_attachment_url($this->option('icon')) .'" />';
 			}
 		}//favicon
+		
+		public function register_admin_scripts(){
+			wp_register_script( 'wpg_media_uploader', WP_GEEK_URI . '/js/wpg-uploads.js', array('jquery'), '1.0.0', true );
+			wp_register_script( 'wpg_widget_admin', WP_GEEK_URI . '/js/wpg-widget-admin.js', array('wpg_media_uploader'), '1.0.0', true );			
+		}
+		
+		public function register_scripts(){
+			wp_register_script( $handle, $src, $deps, $ver, $in_footer );
+		}
+		
+		public function widget_scripts(){
+			wp_enqueue_media();		
+			wp_enqueue_script('wpg_widget_admin');	
+		}//admin_scripts
+
+		public function admin_scripts(){
+			
+		}//admin_scripts
+		
+		public function scripts(){
+			
+		}//scripts
 
 		public static function logo($size='full', $echo = true){
 
 			$img = false;
 			$logo = null;			
 
-			do_action('gg_before_logo', $this);
+			do_action('wpg_before_logo', $this);
 
 			if(self::option('logo')){
-				$img = wp_get_attachment_image_src(self::option('logo'), apply_filters('gg_logo_size', $size)); // returns an array
+				$img = wp_get_attachment_image_src(self::option('logo'), apply_filters('wpg_logo_size', $size)); // returns an array
 			}//if($this->options['logo'])
 			
 			if(self::option('logo_svg')){
@@ -56,22 +81,22 @@ if(!class_exists('WP_Geek')){
 			}//if($this->options['logo_svg'])
 			
 			if($img){
-				$logo = '<span class="gg_logo_box" itemscope itemtype="http://schema.org/Organization">
+				$logo = '<span class="wpg_logo_box" itemscope itemtype="http://schema.org/Organization">
 				<a itemprop="url" href="' . home_url() . '"><img itemprop="logo" class="fp_logo" src="' . $img[0] . '" alt="logo" />' . self::logo_tagline(false) . '</a>
 				</span>';		
 			}//if($img)
 			
-			if($echo){ echo apply_filters('gg_logo',$logo); }
+			if($echo){ echo apply_filters('wpg_logo',$logo); }
 						
-			do_action('gg_after_logo', $this);
+			do_action('wpg_after_logo', $this);
 			
-			return apply_filters('gg_logo',$logo);
+			return apply_filters('wpg_logo',$logo);
 			
 		}//logo		
 		
 		public static function logo_tagline($echo=true){
 			if(self::option('tagline')){ 
-				$return = '<span class="gg_tagline">' . self::option('tagline') . '</span>';
+				$return = '<span class="wpg_tagline">' . self::option('tagline') . '</span>';
 				if($echo){ echo $return;}
 				return $return;
 			}				
@@ -82,7 +107,7 @@ if(!class_exists('WP_Geek')){
 		
 			$key = md5($_SERVER['HTTP_USER_AGENT']);
 		
-			if(false === ($response = get_site_transient('gg_browser_' . $key))){
+			if(false === ($response = get_site_transient('wpg_browser_' . $key))){
 				global $wp_version;
 		
 				$options = array(
@@ -109,8 +134,8 @@ if(!class_exists('WP_Geek')){
 		
 				if(!is_array($response)){ return false; }
 		
-				set_site_transient( 'gg_browser_' . $key, $response, WEEK_IN_SECONDS );
-			}//if(false === ($response = get_site_transient('gg_browser_' . $key)))
+				set_site_transient( 'wpg_browser_' . $key, $response, WEEK_IN_SECONDS );
+			}//if(false === ($response = get_site_transient('wpg_browser_' . $key)))
 		
 			return $response[$var];			
 		}//browser_version	
@@ -174,8 +199,22 @@ if(!class_exists('WP_Geek')){
 					'WY'=>'Wyoming',
 				);	
 				
-				return 	apply_filters('gg_state_array', $statelist);
+				return 	apply_filters('wpg_state_array', $statelist);
 		} //state_array		
+		
+		public static function img_dimensions($img, $echo=true){
+			$dimensions = '';
+			if($img[1]){
+				$dimensions .= ' width="' . $img[1] . '"';
+				}
+			if($img[2]){
+				$dimensions .= ' height="' . $img[2] . '"';
+				}		
+			if($echo){echo $dimensions;}
+			
+			return $dimensions;
+						
+		}//img_dimensions
 		
 	}//WP_Geek
 	

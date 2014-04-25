@@ -7,7 +7,8 @@
 			public $args=array(
 					'menu_slug' => 'wp_geek_admin',
 					'menu_type' => 'menu',
-					'page_title' => 'WordPress Geek Options'
+					'page_title' => 'WordPress Geek Options',
+					'data' => array('icon')
 				);
 			
 			public function __construct(){
@@ -17,8 +18,20 @@
 
 			function fields(){
 				parent::fields();
+									
+				$icon = array(
+					'name' => 'icon',
+					'type' => 'upload',
+					'value' => $this->option('icon')
+				);
 				
-				$return = '<div class="gg_options_section"><h2>Website Icon:</h2></div>';
+				$fields = array($icon);
+				$formargs = array('fields' => $fields);
+				$form = new WP_Geek_Form($formargs);
+				
+				$return = '<div class="wpg_options_section"><h2>Website Icon:</h2>';
+				$return .= $form->fields();
+				$return .= '</div>';
 			
 				return $return;
 			}			

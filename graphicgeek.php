@@ -16,14 +16,19 @@ define('WP_GEEK', dirname(__FILE__));
 define('WP_GEEK_CORE', WP_GEEK . '/core');
 define('WP_GEEK_ClASSES', WP_GEEK . '/classes');
 define('WP_GEEK_OPTIONS', WP_GEEK . '/options');
+define('WP_GEEK_WIDGETS', WP_GEEK . '/widgets');
+define('WP_GEEK_URI', plugins_url() . '/wpgeek');
 
 //Classes
 require_once WP_GEEK_ClASSES . '/wp_geek.php';
+require_once WP_GEEK_ClASSES . '/forms.php';
 require_once WP_GEEK_ClASSES . '/options_page.php';
 
 //option pages
 require_once WP_GEEK_OPTIONS . '/main-options.php';
 
+//widgets
+require_once WP_GEEK_WIDGETS . '/image-widget.php';
 
 foreach(get_declared_classes() as $class){			
 	if(is_subclass_of($class,'WP_Geek')){
