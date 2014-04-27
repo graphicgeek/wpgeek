@@ -59,10 +59,7 @@ jQuery(document).ready(function($){
 				
 				//console.log(attachment.sizes.thumbnail.url);
 			}
-			
-			$('.wpg_delete').click(function(){
-				$(this).parent().remove();
-			});//$('.wpg_delete').click			
+
 /*			
 			// We set multiple to false so only get one image from the uploader
 			attachment = file_frame.state().get('selection').first().toJSON();
@@ -109,10 +106,12 @@ jQuery(document).ready(function($){
 			file_frame.open();
 		});//$('.wpg_media_upload').click
 
-		$('.wpg_delete').click(function(){
-			$(this).parent().remove();
-		});//$('.wpg_delete').click
-
 	}//$.fn.wpg_ready_uploads
+	
+	$('.wpg_media_upload').each(function(){
+		if($(this).data('auto-initiate')){
+			$(this).wpg_uploader();
+		}
+	});	
 
 });//doc ready

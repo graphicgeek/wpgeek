@@ -13,13 +13,17 @@
 					'id' => '',
 					'class' => 'wpg_custom_form',
 					'before_field' => '',
-					'after_field' => ''
+					'after_field' => '',
+					'scripts' => false,
+					'admin_scripts' => false,
+					'widget_admin_scripts' => false
 				); 
 				$args = array_merge($defaults, $args);				
 				//make each variable available to read
 				foreach($args as $key => $value){
 					$this->$key = $value;
 				}
+				
 								
 			}//__construct
 			
@@ -32,6 +36,7 @@
 			}//display
 			
 			public function fields($return=''){
+				$this->widget_admin_scripts();
 				foreach($this->fields as $field){
 
 					switch($field['type']){
@@ -256,7 +261,8 @@
 			public function upload_input($field){
 					$defaults = array(
 						'upload_type' => 'image',
-						'thumbsize' => 'thumbnail'
+						'thumbsize' => 'thumbnail',
+						'auto_initiate' => true
 					); 
 					$field = array_merge($defaults, $field);
 					
@@ -273,7 +279,7 @@
 			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name'] . '" id="' . $field['name'] . '_id" value="' . $field['value'] . '">';
 		            	$return .= '</div>';            		
 	            		                    
-	        			$return .= '<button class="wpg_media_upload" type="button" id="' . $field['name'] . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image">Upload ' . strip_tags($field['label']) . '</button>';
+	        			$return .= '<button class="wpg_media_upload" type="button" id="' . $field['name'] . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '" >Upload ' . strip_tags($field['label']) . '</button>';
         			
 					} else {
 						//for non-image uploads
@@ -288,7 +294,7 @@
 							$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name'] . '" id="' . $field['upload_type'] . '_id" value="' . $field['value'] . '">';
 			                $return .= '</div>';    
 							
-							$return .= '<button class="wpg_media_upload" type="button" id="' . $field['upload_type'] . '" data-uploader_button_text="Select ' . strip_tags($field['label']) . '" data-uploader_title="Select a ' . strip_tags($field['label']) . '" data-uploadtype="' . $field['upload_type'] . '">Upload ' . strip_tags($field['label']) . '</button>';
+							$return .= '<button class="wpg_media_upload" type="button" id="' . $field['upload_type'] . '" data-uploader_button_text="Select ' . strip_tags($field['label']) . '" data-uploader_title="Select a ' . strip_tags($field['label']) . '" data-uploadtype="' . $field['upload_type'] . '" data-auto-initiate="' . $field['auto_initiate'] . '">Upload ' . strip_tags($field['label']) . '</button>';
 					
 					}
 		

@@ -140,7 +140,8 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			'name' => $this->get_field_name('image'),
 			'id' => $this->get_field_id('image'),
 			'type' => 'upload',
-			'value' => $instance['image']
+			'value' => $instance['image'],
+			'auto_initiate' => false
 		);
 		
 		$size = array(
@@ -166,7 +167,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 		);
 
 		$fields = array($title, $subhead, $before_image, $after_image, $link, $imagegroup);
-		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
+		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>', 'widget_admin_scripts' => array('wp_enqueue_media', 'wpg_widget_admin'));						
 		
 		$form = new WP_Geek_Form($formargs);
 		
