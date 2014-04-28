@@ -36,7 +36,7 @@
 			}//display
 			
 			public function fields($return=''){
-				$this->widget_admin_scripts();
+
 				foreach($this->fields as $field){
 
 					switch($field['type']){
@@ -232,7 +232,7 @@
 			}//parse_radio_group			
 			
 			public function select($field){
-				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name'] . '"'.  $field['other'] . $field['data'] . ' >';
+				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name']  . '"'.  $field['other'] . $field['data'] . ' >';
 				foreach($field['options'] as $value => $label){
 					$return .= '<option value="' . $value . '"' .  selected($value, $field['value'], false) . '>' . $label . '</option>';	
 				}//foreach
@@ -248,13 +248,13 @@
 					$field['class'] .= ' datepicker';
 				}
 				
-				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" type="' . $field['type'] . '" name="' . $field['name'] . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
+				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" type="' . $field['type'] . '" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
 				return $this->before_field . $return . $this->after_field;	
 			}//	text_input	
 			
 			public function textarea($field){
 				
-				$return = $field['label'] . '<textarea ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name'] . '" '  .  $field['other'] . $field['data'] . '>' . $field['value'] . '</textarea>';			
+				$return = $field['label'] . '<textarea ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name']  . '" '  .  $field['other'] . $field['data'] . '>' . $field['value'] . '</textarea>';			
 				return $this->before_field . $return . $this->after_field;	
 			}//	textarea	
 						
@@ -271,15 +271,15 @@
 						if($field['value']) {
 				            $img = wp_get_attachment_image_src( $field['value'], $field['thumbsize']);
 				            $return .= '<span class="wpg_delete">X</span>';
-				            $return .= '<span id="' . $field['name'] . '_result"><img class="wpg_media_upload" src="' . $img[0] . '" /></span>';
+				            $return .= '<span id="' . sanitize_html_class($field['name']) . '_result"><img class="wpg_media_upload" src="' . $img[0] . '" /></span>';
 	            		} else { 
-	            			$return .= '<span id="' . $field['name'] . '_result"></span>';
+	            			$return .= '<span id="' . sanitize_html_class($field['name']) . '_result"></span>';
 	            		}//end if($field['value'])
 	
-			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name'] . '" id="' . $field['name'] . '_id" value="' . $field['value'] . '">';
+			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '" id="' . sanitize_html_class($field['name']) . '_id" value="' . $field['value'] . '">';
 		            	$return .= '</div>';            		
 	            		                    
-	        			$return .= '<button class="wpg_media_upload" type="button" id="' . $field['name'] . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '" >Upload ' . strip_tags($field['label']) . '</button>';
+	        			$return .= '<button class="wpg_media_upload" type="button" id="' . sanitize_html_class($field['name']) . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '" >Upload ' . strip_tags($field['label']) . '</button>';
         			
 					} else {
 						//for non-image uploads
@@ -291,38 +291,38 @@
 							} else {
 								$return .= '<p id="' . $field['upload_type'] . '_upload_result"></p>';
 							}
-							$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name'] . '" id="' . $field['upload_type'] . '_id" value="' . $field['value'] . '">';
+							$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '" id="' . $field['upload_type'] . '_id" value="' . $field['value'] . '">';
 			                $return .= '</div>';    
 							
-							$return .= '<button class="wpg_media_upload" type="button" id="' . $field['upload_type'] . '" data-uploader_button_text="Select ' . strip_tags($field['label']) . '" data-uploader_title="Select a ' . strip_tags($field['label']) . '" data-uploadtype="' . $field['upload_type'] . '" data-auto-initiate="' . $field['auto_initiate'] . '">Upload ' . strip_tags($field['label']) . '</button>';
+							$return .= '<button type="button" id="' . $field['upload_type'] . '" data-uploader_button_text="Select ' . strip_tags($field['label']) . '" data-uploader_title="Select a ' . strip_tags($field['label']) . '" data-uploadtype="' . $field['upload_type'] . '" data-auto-initiate="' . $field['auto_initiate'] . '">Upload ' . strip_tags($field['label']) . '</button>';
 					
 					}
 		
-				return $return;	
+				return '<div class="wpg_media_upload">' . $return . '</div>';	
 			}//	upload_input				
 			
 			public function email_input($field){
-				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_email_input ' . $field['class'] . '" type="email" name="' . $field['name'] . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
+				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_email_input ' . $field['class'] . '" type="email" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
 				return $return;	
 			}//	upload_input				
 
 			public function phone($field){
-				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_phone_input ' . $field['class'] . '" type="text" name="' . $field['name'] . '" value="' . $field['value'] . '" '. $field['placeholder'] . $field['other'] . $field['data'] . ' />';	
+				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_phone_input ' . $field['class'] . '" type="text" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] . $field['other'] . $field['data'] . ' />';	
 				return $this->before_field . $return . $this->after_field;			
 			}//	phone
 		
 			public function checkbox($field){
-				$return = '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_checkbox_input ' . $field['class'] . '" type="checkbox" name="' . $field['name'] . '" value="' . $field['check_value'] . '" ' . checked($field['check_value'], $field['value'], false) . ' ' . $field['other'] . $field['data'] . ' />' . $field['label'];	
+				$return = '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_checkbox_input ' . $field['class'] . '" type="checkbox" name="' . $field['name']  . '" value="' . $field['check_value'] . '" ' . checked($field['check_value'], $field['value'], false) . ' ' . $field['other'] . $field['data'] . ' />' . $field['label'];	
 				return $this->before_field . $return . $this->after_field;			
 			}//	checkbox
 
 			public function radio($field){
-				$return = '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_radio_input ' . $field['class'] . '" type="radio" name="' . $field['name'] . '" value="' . $field['radio_value'] . '" ' . checked($field['radio_value'], $field['value'], false) . ' ' . $field['other'] . $field['data'] . ' />' . $field['label'];	
+				$return = '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_radio_input ' . $field['class'] . '" type="radio" name="' . $field['name']  . '" value="' . $field['radio_value'] . '" ' . checked($field['radio_value'], $field['value'], false) . ' ' . $field['other'] . $field['data'] . ' />' . $field['label'];	
 				return $this->before_field . $return . $this->after_field;			
 			}//	radio										
 			
 			public function content_select($field){
-				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name'] . '"'.  $field['other'] . $field['data'] . ' >';
+				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name']  . '"'.  $field['other'] . $field['data'] . ' >';
 				$return .= self::content_options_list($field['value']);
 				$return .= '</select>';
 				
@@ -356,7 +356,7 @@
 			}//content_options_list
 			
 			public function image_size_selector($field){
-				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name'] . '"'.  $field['other'] . $field['data'] . ' >';
+				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name']  . '"'.  $field['other'] . $field['data'] . ' >';
 				$return .= self::image_size_options($field['value']);
 				$return .= '</select>';
 				

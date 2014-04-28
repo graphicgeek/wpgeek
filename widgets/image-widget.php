@@ -81,6 +81,8 @@ class wp_Geek_Widget_Images extends WP_Widget {
     }
 	/*--------------------------Admin Form------------------------------------------------------*/
 	function form( $instance ) {
+		wp_enqueue_media();
+		wp_enqueue_script('wpg_widget_admin');
 		
 		$title = array(
 			'name' => $this->get_field_name('title'),
@@ -167,7 +169,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 		);
 
 		$fields = array($title, $subhead, $before_image, $after_image, $link, $imagegroup);
-		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>', 'widget_admin_scripts' => array('wp_enqueue_media', 'wpg_widget_admin'));						
+		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
 		
 		$form = new WP_Geek_Form($formargs);
 		

@@ -3,25 +3,22 @@ if(!class_exists('WP_Geek')){
 	class WP_Geek{
 		public static $options;
 		private static $instance = null;
-		public $scripts, $admin_scripts, $widget_admin_scripts;
 
 		public static function init(){
 			add_action('plugins_loaded', array(self::instance(), 'add_actions'));
 			add_action('admin_init', array(self::instance(), 'register_admin_scripts'));
 			add_action('init', array(self::instance(), 'register_scripts'));
-			add_action('sidebar_admin_setup', array(self::instance(), 'widget_admin_scripts'));
 		}
 	
-		public static function instance()
-		{
+		public static function instance(){
 			// create a new object if it doesn't exist.
 			is_null(self::$instance) && self::$instance = new self;
 			return self::$instance;
-		}
+		}//instance
 	
 		public function add_actions(){
 			add_action( 'wp_head', array( $this, 'favicon' ) );
-		}
+		}//instance
 	
 		public function option($option){
 			if(!self::$options) { self::$options = get_option('wpg_options'); }
@@ -47,52 +44,6 @@ if(!class_exists('WP_Geek')){
 		public function register_scripts(){
 			//wp_register_script( $handle, $src, $deps, $ver, $in_footer );
 		}
-		
-		public function widget_admin_scripts(){
-			error_log('widget admin -' . $this->widget_admin_scripts);
-			if($this->widget_admin_scripts){
-				if(is_array($this->widget_admin_scripts)){
-					foreach($this->widget_admin_scripts as $script){
-						error_log($script);
-						if($script == 'wp_enqueue_media'){wp_enqueue_media();}
-						else {wp_enqueue_script($script);}
-					}//foreach	
-				} else {
-					if($this->widget_admin_scripts == 'wp_enqueue_media'){wp_enqueue_media();}
-					else {wp_enqueue_script($this->widget_admin_scripts);}
-				}//if(is_array
-			}//if(self::admin_scripts)				
-					
-				
-		}//admin_scripts
-
-		public function admin_scripts(){
-			if($this->admin_scripts){
-				if(is_array($this->admin_scripts)){
-					foreach($this->admin_scripts as $script){
-						if($script == 'wp_enqueue_media'){wp_enqueue_media();}
-						else {wp_enqueue_script($script);}
-					}//foreach	
-				} else {
-					if($this->admin_scripts == 'wp_enqueue_media'){wp_enqueue_media();}
-					else {wp_enqueue_script($this->admin_scripts);}
-				}//if(is_array
-			}//if(self::admin_scripts)			
-		}//admin_scripts
-		
-		public function scripts(){
-			if($this->scripts){
-				if(is_array($this->scripts)){
-					foreach($this->scripts as $script){
-						if($script == 'wp_enqueue_media'){wp_enqueue_media();}
-						else {wp_enqueue_script($script);}
-					}//foreach	
-				} else {
-					if($this->scripts == 'wp_enqueue_media'){wp_enqueue_media();}
-					else {wp_enqueue_script($this->scripts);}
-				}//if(is_array
-			}//if(self::admin_scripts)		
-		}//scripts
 
 		public static function logo($size='full', $echo = true){
 

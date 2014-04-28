@@ -22,9 +22,10 @@ jQuery(document).ready(function($){
 			if($(this).data('upload_result')){settings.upload_result = $(this).data('upload_result')}
 		}
 				
-		console.log($(this).attr('ID'));
+	
 		var file_frame;
-		$(this).click(function(event){
+		$(this).on('click', function(event){
+
 			// Uploading files
 			file_frame = null;
 		
@@ -46,7 +47,6 @@ jQuery(document).ready(function($){
 				//handle multiple selections
 				var selection = file_frame.state().get('selection');
 				selection.each(function(attachment){
-					console.log(attachment.sizes.thumbnail.url);
 					
 				});	//selection.each			
 			} else {
@@ -54,13 +54,16 @@ jQuery(document).ready(function($){
 				attachment = file_frame.state().get('selection').first().toJSON();
 				
 				var result = '<img class="wpg_media_upload" src="' + attachment.sizes.thumbnail.url + '" />';
-				console.log(settings.upload_result);
-				$(settings.upload_result).html(result); //display image
-				
-				//console.log(attachment.sizes.thumbnail.url);
+				$(settings.upload_result).html(result); //display image	
+				$(settings.ID).val(attachment.id); //send id to input				
 			}
 
 /*			
+
+widget-wpg-image-widget[__i__][image]_result
+
+widget-wpg-image-widget[2][image]_result
+widget-wpg-image-widget[2][image]_result 
 			// We set multiple to false so only get one image from the uploader
 			attachment = file_frame.state().get('selection').first().toJSON();
 			
@@ -111,7 +114,7 @@ jQuery(document).ready(function($){
 	$('.wpg_media_upload').each(function(){
 		if($(this).data('auto-initiate')){
 			$(this).wpg_uploader();
-		}
+		} 
 	});	
 
 });//doc ready
