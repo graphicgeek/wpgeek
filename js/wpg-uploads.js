@@ -1,6 +1,14 @@
 jQuery(document).ready(function($){
 	
 	$.fn.wpg_uploader = function(options){
+		if(!this.hasClass('wpg_not_loaded')){ return;
+		//this prevents wpg_uploader from being duplicated
+		//once loaded, this class is removed
+		 }		
+		this.removeClass('wpg_not_loaded'); 
+	
+		if(!this.hasClass('wpg_media_upload')){ this.addClass('wpg_media_upload'); }
+		if(!this.parent().hasClass('wpg_upload_field')){ this.wrap('<div class="wpg_upload_field"></div>'); }
 
         // default options.
         var settings = $.extend({
@@ -24,88 +32,42 @@ jQuery(document).ready(function($){
 				
 	
 		var file_frame;
-		$(this).on('click', function(event){
-
+		$('.wpg_upload_field').on('click', '.wpg_media_upload', function(event){
 			// Uploading files
 			file_frame = null;
 		
 			event.preventDefault();
 	 
 			// Create the media frame.
-		file_frame = wp.media.frames.file_frame = wp.media({
-			title: settings.uploader_title,
-			button: {
-				text: settings.uploader_button_text,
-			},
-			multiple: settings.allowMultiples  // Set to true to allow multiple files to be selected
-		});
+			file_frame = wp.media.frames.file_frame = wp.media({
+				title: settings.uploader_title,
+				button: {
+					text: settings.uploader_button_text,
+				},
+				multiple: settings.allowMultiples  // Set to true to allow multiple files to be selected
+			});
 	 
-		// When an image is selected, run a callback.
-		file_frame.on( 'select', function() {
-			
-			if(settings.allowMultiples){
-				//handle multiple selections
-				var selection = file_frame.state().get('selection');
-				selection.each(function(attachment){
-					
-				});	//selection.each			
-			} else {
-				//handle single image	
-				attachment = file_frame.state().get('selection').first().toJSON();
+			// When an image is selected, run a callback.
+			file_frame.on( 'select', function() {
 				
-				var result = '<img class="wpg_media_upload" src="' + attachment.sizes.thumbnail.url + '" />';
-				$(settings.upload_result).html(result); //display image	
-				$(settings.ID).val(attachment.id); //send id to input				
-			}
-
-/*			
-
-widget-wpg-image-widget[__i__][image]_result
-
-widget-wpg-image-widget[2][image]_result
-widget-wpg-image-widget[2][image]_result 
-			// We set multiple to false so only get one image from the uploader
-			attachment = file_frame.state().get('selection').first().toJSON();
-			
-			if(!uploadType){
+				if(settings.allowMultiples){
+					//handle multiple selections
+					var selection = file_frame.state().get('selection');
+					selection.each(function(attachment){
 						
-				$(imgID).attr('src', attachment.url); //display image
-	
-				}else{
-					if(uploadType == 'gallery_images'){
-    	var selection = file_frame.state().get('selection');
-    	var totalItems = $('#wpg_gallery_total_img').val();
-		selection.each(function(attachment){
-    	var thisLI	
-    	thisLI = '<li class="ui-state-default" id="sortable_li_' + attachment.id + '">';
-		thisLI += '<img src="' + attachment.attributes.url + '" alt="" />';
-		thisLI += '<input type="text" name="gallery_image_titles[]" value="' + attachment.attributes.title + '">';
-		thisLI += '<input type="hidden" name="gallery_images[]" value="' + attachment.id + '">';
-		thisLI += '<input type="hidden" name="gallery_image_type[]" value="image">';
-		thisLI += '<span class="wpg_delete_li" data-ID="' + attachment.id + '">X</span>';
-		thisLI += '</li>';
-       
-        $('#' + thisID + '_upload_result').append(thisLI);
-    		totalItems++;
-    		$('#wpg_gallery_total_img').val(totalItems);
-    		
-});//.each
-		
-
+					});	//selection.each			
+				} else {
+					//handle single image	
+					attachment = file_frame.state().get('selection').first().toJSON();
 					
-					} else {
-						$('#' + thisID + '_upload_result').html(uploadType + ' URL: ' + attachment.url);
-						//console.log('#' + thisID + '_upload_result');
-					}
-				
+					var result = '<img class="wpg_media_upload" src="' + attachment.sizes.thumbnail.url + '" />';
+					$(settings.upload_result).html(result); //display image	
+					$(settings.ID).val(attachment.id); //send id to input				
 				}
-				
-			$(idID).val(attachment.id); //send id to input	
-			*/
-		  // Do something with attachment.id and/or attachment.url here
+	
 			});//file_frame.on( 'select'
 	 
-		// Finally, open the modal
+			// Finally, open the modal
 			file_frame.open();
 		});//$('.wpg_media_upload').click
 

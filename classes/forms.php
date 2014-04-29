@@ -279,7 +279,7 @@
 			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '" id="' . sanitize_html_class($field['name']) . '_id" value="' . $field['value'] . '">';
 		            	$return .= '</div>';            		
 	            		                    
-	        			$return .= '<button class="wpg_media_upload" type="button" id="' . sanitize_html_class($field['name']) . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '" >Upload ' . strip_tags($field['label']) . '</button>';
+	        			$return .= '<button class="wpg_media_upload wpg_not_loaded" type="button" id="' . sanitize_html_class($field['name']) . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '" >Upload ' . strip_tags($field['label']) . '</button>';
         			
 					} else {
 						//for non-image uploads
@@ -298,13 +298,13 @@
 					
 					}
 		
-				return '<div class="wpg_media_upload">' . $return . '</div>';	
+				return $return;	
 			}//	upload_input				
 			
 			public function email_input($field){
 				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_email_input ' . $field['class'] . '" type="email" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
 				return $return;	
-			}//	upload_input				
+			}//	email_input				
 
 			public function phone($field){
 				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_phone_input ' . $field['class'] . '" type="text" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] . $field['other'] . $field['data'] . ' />';	
