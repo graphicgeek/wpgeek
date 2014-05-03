@@ -18,6 +18,8 @@
 
 			function fields(){
 				parent::fields();
+				wp_enqueue_media();
+				wp_enqueue_script('wpg_media_uploader');				
 									
 				$icon = array(
 					'name' => 'icon',
