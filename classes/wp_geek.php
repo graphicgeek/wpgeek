@@ -7,7 +7,9 @@ if(!class_exists('WP_Geek')){
 		public static function init(){
 			add_action('plugins_loaded', array(self::instance(), 'add_actions'));
 			add_action('admin_init', array(self::instance(), 'register_admin_scripts'));
+			add_action('admin_init', array(self::instance(), 'admin_styles'));
 			add_action('init', array(self::instance(), 'register_scripts'));
+			add_action('init', array(self::instance(), 'styles'));
 		}
 	
 		public static function instance(){
@@ -38,13 +40,26 @@ if(!class_exists('WP_Geek')){
 		public function register_admin_scripts(){
 			wp_register_script( 'wpg_admin', WP_GEEK_URI . '/js/wpg-admin.js', array('jquery'), '1.0.0', true );
 			wp_register_script( 'wpg_media_uploader', WP_GEEK_URI . '/js/wpg-uploads.js', array('wpg_admin'), '1.0.0', true );
-			wp_register_script( 'wpg_widget_admin', WP_GEEK_URI . '/js/wpg-widget-admin.js', array('wpg_media_uploader'), '1.0.0', true );			
-		}
-		
-		public function register_scripts(){
-			//wp_register_script( $handle, $src, $deps, $ver, $in_footer );
+			wp_register_script( 'wpg_widget_admin', WP_GEEK_URI . '/js/wpg-widget-admin.js', array('wpg_media_uploader'), '1.0.0', true );		
+			wp_register_style('wpg_admin_styles', WP_GEEK_URI . '/css/wpg-admin.css');	
 		}
 
+		public function admin_styles(){
+			wp_enqueue_style('wpg_admin_styles');	
+		}		
+		
+		public function register_scripts(){
+			wp_register_script( 'wpg_colorgox', WP_GEEK_URI . '/js/jquery.colorbox-min.js', array('jquery'), '1.5.9', true );
+			wp_register_script( 'wpg_scripts', WP_GEEK_URI . '/js/wpg.js', array('wpg_colorgox'), '1.0.0', true );
+				
+			wp_register_style('wpg_styles', WP_GEEK_URI . '/css/wpg.css');
+			wp_register_style('wpg_colorgox_styles', WP_GEEK_URI . '/css/colorbox.css');
+		}
+
+		public function styles(){
+			wp_enqueue_style('wpg_styles');	
+		}		
+		
 		public static function logo($size='full', $echo = true){
 
 			$img = false;

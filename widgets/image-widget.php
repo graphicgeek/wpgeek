@@ -9,6 +9,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 		'subhead',
 		'image',
 		'size',
+		'lightbox',
 		'before_image',
 		'after_image',
 		'link',
@@ -23,6 +24,8 @@ class wp_Geek_Widget_Images extends WP_Widget {
 	
 	/*--------------------------Front End Display------------------------------------------------------*/
     function widget($args, $instance) {
+		wp_enqueue_style('wpg_styles');
+		wp_enqueue_script('wpg_scripts');
         extract($args);
 		
 		foreach($this->fields as $key){ $this->$key = $instance[$key]; }//foreach
@@ -50,7 +53,14 @@ class wp_Geek_Widget_Images extends WP_Widget {
 				$style = ' style="max-width:' . $this->maxwidth  . '; height:auto;"';
 				}
 			 else { $style ='';}
-			if($this->link){ ?> <a href="<?php echo $this->link; ?>" <?php echo $target; ?>> <?php } ?>
+			
+			if($this->lightbox){
+				wp_enqueue_style('wpg_colorgox_styles');
+				$this->link = wp_get_attachment_url($this->image);	
+				$link_class = ' class="wpg_lightbox"';
+			}
+			 
+			if($this->link){ ?> <a href="<?php echo $this->link; ?>" <?php echo $target . $link_class; ?>> <?php } ?>
 				<img<?php echo $style; ?> class="widget_thumb" src="<?php echo $img[0]; ?>" alt="<?php echo $alt; ?>" <?php WP_Geek::img_dimensions($img); ?> />
 		<?php if($this->link){ ?></a> <?php } 
 		}//if($thumb)
@@ -67,12 +77,10 @@ class wp_Geek_Widget_Images extends WP_Widget {
 	/*--------------------------save info------------------------------------------------------*/
     function update( $new_instance, $old_instance ) {
         $instance = $old_instance;
-        $instance['title'] = strip_tags($new_instance['title']);
-		$instance['subhead'] = $new_instance['subhead'];
-		$instance['link'] = $new_instance['link'];	
-		$instance['customlink'] = $new_instance['customlink'];			
-		$instance['image'] = $new_instance['image'];	
-		$instance['size'] = $new_instance['size'];		
+		foreach($this->fields as $field){
+			$instance[$field] = strip_tags($new_instance[$field]);
+		}//foreach
+	
 		$instance['before_image'] = stripslashes($new_instance['before_image']);
 		$instance['after_image'] = stripslashes($new_instance['after_image']);
 		$instance['maxwidth'] = stripslashes($new_instance['maxwidth']);		
@@ -120,6 +128,15 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			'class' => 'widefat'
 		);	
 
+		$lightbox = array(
+			'type' => 'checkbox',
+			'name' => $this->get_field_name('lightbox'),
+			'label' => 'Open Image in Lightbox: ',
+			'id' => $this->get_field_id('lightbox'),
+			'value' => $instance['lightbox'],
+			'check_value' => 'yes'
+		);	
+		
 		$link = array(
 			'type' => 'content_selector',
 			'name' => $this->get_field_name('link'),
@@ -168,7 +185,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			'type' => 'group'
 		);
 
-		$fields = array($title, $subhead, $before_image, $after_image, $link, $imagegroup);
+		$fields = array($title, $subhead, $before_image, $after_image, $lightbox, $link, $imagegroup);
 		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
 		
 		$form = new WP_Geek_Form($formargs);

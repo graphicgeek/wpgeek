@@ -1,0 +1,16 @@
+.wpg_delete{
+float: right;
+cursor: pointer;
+background: #666;
+color: #fff;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+padding: 3px;;
+}
+
+.wpg_delete:after{
+	content:'';
+	display:block;
+	clear:both;	
+}
