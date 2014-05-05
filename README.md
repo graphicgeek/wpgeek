@@ -1,4 +1,3 @@
 # WordPress Geek #
+A collection of functions and features for WordPress
 ======
-
-END OF FILE
