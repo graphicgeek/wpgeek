@@ -23,6 +23,7 @@ define('WP_GEEK_URI', plugins_url() . '/wpgeek');
 require_once WP_GEEK_ClASSES . '/wp_geek.php';
 require_once WP_GEEK_ClASSES . '/forms.php';
 require_once WP_GEEK_ClASSES . '/options_page.php';
+require_once WP_GEEK_ClASSES . '/image_sizes.php';
 
 //option pages
 require_once WP_GEEK_OPTIONS . '/main-options.php';

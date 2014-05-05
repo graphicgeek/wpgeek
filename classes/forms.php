@@ -14,9 +14,7 @@
 					'class' => 'wpg_custom_form',
 					'before_field' => '',
 					'after_field' => '',
-					'scripts' => false,
-					'admin_scripts' => false,
-					'widget_admin_scripts' => false
+					'scripts' => false
 				); 
 				$args = array_merge($defaults, $args);				
 				//make each variable available to read
@@ -298,7 +296,7 @@
 					
 					}
 		
-				return $return;	
+				return $field['label'] . $return;	
 			}//	upload_input				
 			
 			public function email_input($field){

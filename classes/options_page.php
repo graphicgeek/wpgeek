@@ -13,7 +13,8 @@
 					'capability' => 'manage_options',
 					'parent_slug' => false,
 					'menu_slug' => false,
-					'data' => false
+					'data' => false,
+					'options_name' => false
 				);
 				
 				$args = array_merge($defaults, $args); //merge defaults with user inputs
@@ -22,7 +23,20 @@
 				foreach($args as $key => $value){
 					$this->$key = $value;			
 				}//foreach	
-			
+				
+				if($this->options_name){
+					
+					$options = get_option($this->options_name); 
+	
+					if(is_array($options)){
+						foreach($options as $key => $data){
+							$this->data[$key] = $data;
+						}//foreach							
+					}//if
+				
+				
+				}							
+				
 			}//__construct
 
 			public function add_actions(){
@@ -46,7 +60,7 @@
 			public function form(){
 				if (!current_user_can($this->capability)){ wp_die('You do not have sufficient permissions to access this page.'); }		
 				
-				if(isset($_POST['submit'])){ $this->update(); }	
+				if(isset($_POST['wpg_submit'])){ $this->update(); }	
 												
 				$form = '<div class="wrap"><form id="wp_geek_options_form" method="post">';
 					$form .= '<input type="hidden" name="wp_geek_nonce_name" id="wp_geek_nonce_name" value="' . wp_create_nonce( 'wp_geek_nonce' . plugin_basename(__FILE__) ) . '" />';
@@ -61,6 +75,7 @@
 			public function update(){
 				
 				if(!wp_verify_nonce($_POST['wp_geek_nonce_name'], 'wp_geek_nonce' . plugin_basename(__FILE__) )){
+					
 					wp_die('Security Error. Try again.');
 					return false;	
 				}
@@ -68,8 +83,10 @@
 				if(!is_array($this->data)){ return false; }
 				
 				foreach($this->data as $data){
-					$this->data[$data] = $_POST[$field];
+					$this->data[$data] = $_POST[$data];
 				}//foreach
+				
+				update_option($this->options_name, $this->data);
 										
 			}//update
 			

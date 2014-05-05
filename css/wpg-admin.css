@@ -1,3 +1,14 @@
+#wp_geek_options_form .wpg_upload_field{
+	display:inline-block;	
+	border: 1px solid #ccc;
+	padding: 5px;
+	margin: 5px;
+}
+
+#wp_geek_options_form #wpg_form_submit{
+	display:block;	
+}
+
 .wpg_delete{
 float: right;
 cursor: pointer;

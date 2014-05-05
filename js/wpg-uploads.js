@@ -6,6 +6,7 @@ jQuery(document).ready(function($){
 		//once loaded, this class is removed
 		 }		
 		this.removeClass('wpg_not_loaded'); 
+		
 	
 		if(!this.hasClass('wpg_media_upload')){ this.addClass('wpg_media_upload'); }
 		if(!this.parent().hasClass('wpg_upload_field')){ this.wrap('<div class="wpg_upload_field"></div>'); }
@@ -32,9 +33,10 @@ jQuery(document).ready(function($){
 				
 	
 		var file_frame;
-		$('.wpg_upload_field').on('click', '.wpg_media_upload', function(event){
+		this.click(function(event){
 			// Uploading files
 			file_frame = null;
+			
 		
 			event.preventDefault();
 	 

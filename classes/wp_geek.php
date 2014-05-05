@@ -24,7 +24,7 @@ if(!class_exists('WP_Geek')){
 	
 		public function option($option){
 			if(!self::$options) { self::$options = get_option('wpg_options'); }
-		
+			
 			if(!isset(self::$options[$option])){ return false; }
 			
 			return self::$options[$option];
@@ -65,8 +65,8 @@ if(!class_exists('WP_Geek')){
 			$img = false;
 			$logo = null;			
 
-			do_action('wpg_before_logo', $this);
-
+			do_action('wpg_before_logo', self::instance());
+			
 			if(self::option('logo')){
 				$img = wp_get_attachment_image_src(self::option('logo'), apply_filters('wpg_logo_size', $size)); // returns an array
 			}//if($this->options['logo'])
@@ -82,13 +82,13 @@ if(!class_exists('WP_Geek')){
 			
 			if($img){
 				$logo = '<span class="wpg_logo_box" itemscope itemtype="http://schema.org/Organization">
-				<a itemprop="url" href="' . home_url() . '"><img itemprop="logo" class="fp_logo" src="' . $img[0] . '" alt="logo" />' . self::logo_tagline(false) . '</a>
+				<a itemprop="url" href="' . home_url() . '"><img itemprop="logo" class="wpg_logo" src="' . $img[0] . '" alt="logo" />' . self::logo_tagline(false) . '</a>
 				</span>';		
 			}//if($img)
 			
 			if($echo){ echo apply_filters('wpg_logo',$logo); }
 						
-			do_action('wpg_after_logo', $this);
+			do_action('wpg_after_logo', self::instance());
 			
 			return apply_filters('wpg_logo',$logo);
 			

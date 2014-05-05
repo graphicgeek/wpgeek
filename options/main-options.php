@@ -8,7 +8,8 @@
 					'menu_slug' => 'wp_geek_admin',
 					'menu_type' => 'menu',
 					'page_title' => 'WordPress Geek Options',
-					'data' => array('icon')
+					'data' => array('logo', 'icon'),
+					'options_name' => 'wpg_options'
 				);
 			
 			public function __construct(){
@@ -21,19 +22,26 @@
 				wp_enqueue_media();
 				wp_enqueue_script('wpg_media_uploader');				
 									
+				$logo = array(
+					'name' => 'logo',
+					'label' => 'Website Logo: ',
+					'type' => 'upload',
+					'value' => $this->option('logo')
+				);	
+				
 				$icon = array(
 					'name' => 'icon',
+					'label' => 'Website Icon: ',
 					'type' => 'upload',
 					'value' => $this->option('icon')
 				);
-				
-				$fields = array($icon);
+			
+				$fields = array($logo, $icon);
 				$formargs = array('fields' => $fields);
 				$form = new WP_Geek_Form($formargs);
 				
-				$return = '<div class="wpg_options_section"><h2>Website Icon:</h2>';
-				$return .= $form->fields();
-				$return .= '</div>';
+				$return = $form->fields();
+	
 			
 				return $return;
 			}			
