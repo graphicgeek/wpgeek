@@ -14,7 +14,9 @@ class wp_Geek_Widget_Images extends WP_Widget {
 		'after_image',
 		'link',
 		'customlink',
-		'maxwidth'
+		'maxwidth',
+		'link_title',
+		'readmore'
 	);
 	
     function wp_Geek_Widget_Images(){
@@ -32,10 +34,20 @@ class wp_Geek_Widget_Images extends WP_Widget {
 		
 		if($this->link){ $this->link = get_permalink($this->link); $target = ''; }
 		if($this->customlink){ $this->link = $this->customlink; $target = ' target="_blank"'; }
+
+		if($this->lightbox){
+			wp_enqueue_style('wpg_colorgox_styles');
+			$this->link = wp_get_attachment_url($this->image);	
+			$link_class = ' class="wpg_lightbox"';
+		}
 		
 		echo $before_widget;
 		
-		echo $before_title . $this->title . $after_title; 
+		echo $before_title;
+		if($this->link && $this->link_title){ echo '<a href="' . $this->link . '"' . $target . $link_class . '>'; }
+			echo $this->title;
+		if($this->link && $this->link_title){ echo '</a>'; }
+        echo $after_title; 
 		
 		if($this->subhead){ ?><h4><?php echo $this->subhead; ?></h4><?php }
 
@@ -53,21 +65,17 @@ class wp_Geek_Widget_Images extends WP_Widget {
 				$style = ' style="max-width:' . $this->maxwidth  . '; height:auto;"';
 				}
 			 else { $style ='';}
-			
-			if($this->lightbox){
-				wp_enqueue_style('wpg_colorgox_styles');
-				$this->link = wp_get_attachment_url($this->image);	
-				$link_class = ' class="wpg_lightbox"';
-			}
 			 
 			if($this->link){ ?> <a href="<?php echo $this->link; ?>" <?php echo $target . $link_class; ?>> <?php } ?>
 				<img<?php echo $style; ?> class="widget_thumb" src="<?php echo $img[0]; ?>" alt="<?php echo $alt; ?>" <?php WP_Geek::img_dimensions($img); ?> />
 		<?php if($this->link){ ?></a> <?php } 
 		}//if($thumb)
 
-        if($this->after_image){ ?>
+        if($this->after_image || ($this->readmore && $this->link)){ ?>
 			<div class="custom_excerpt after_widget_thumb">
-                <?php echo do_shortcode(wpautop($this->after_image)); ?>
+                <?php echo do_shortcode(wpautop($this->after_image));
+				if($this->link && $this->readmore){ echo '<p class="readmore"><a href="' . $this->link . '"' . $target . $link_class . '>' . $this->readmore . '</a><p>'; }
+				 ?>
 			</div>
 		<?php }
 		
@@ -155,6 +163,25 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			'class' => 'widefat'
 		);
 
+
+		$link_title = array(
+			'type' => 'checkbox',
+			'name' => $this->get_field_name('link_title'),
+			'label' => 'Link Title: ',
+			'id' => $this->get_field_id('link_title'),
+			'value' => $instance['link_title'],
+			'check_value' => 'yes'
+		);	
+
+		$readmore = array(
+			'name' => $this->get_field_name('readmore'),
+			'label' => 'Read More Text: ',
+			'placeholder' => 'Read More Text',
+			'id' => $this->get_field_id('readmore'),
+			'value' => $instance['readmore'],
+			'class' => 'widefat'
+		);		
+
 		$image = array(
 			'name' => $this->get_field_name('image'),
 			'id' => $this->get_field_id('image'),
@@ -185,7 +212,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			'type' => 'group'
 		);
 
-		$fields = array($title, $subhead, $before_image, $after_image, $lightbox, $link, $imagegroup);
+		$fields = array($title, $subhead, $before_image, $after_image, $lightbox, $link, $link_title, $readmore, $imagegroup);
 		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
 		
 		$form = new WP_Geek_Form($formargs);

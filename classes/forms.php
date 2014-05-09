@@ -1,6 +1,34 @@
 <?php
 
 	if(!class_exists('WP_Geek_Form')){
+		/* TO DO: anything that can be done to simplify this class. It seems a bit clunky.
+		
+			-make use variable functions http://php.net/manual/en/functions.variable-functions.php
+			
+			desired syntax:
+			$text = array('');
+			$fields = array();
+			$form = new WP_Geek_Form($args);
+			$form->display(); //return form as a variable
+			$form->display(true); //echo form
+			$form->fields(); //return fields as a variable
+			echo $form->fields(); //echo fields
+			
+			desired input types:
+			
+			-text
+				-date
+				-phone
+				-email
+				-hidden
+			-checkbox
+			-radio
+			-upload
+			-colorpicker
+			-textarea
+			-groups
+		
+		*/
 
 		class WP_Geek_Form extends WP_Geek{
 			
@@ -38,22 +66,21 @@
 				foreach($this->fields as $field){
 
 					switch($field['type']){
+						case 'wrapper':
+							$return .= $this->parse_wrapper($field);
+						break;						
 						case 'group':
 							$return .= $this->parse_group($field);
 						break;
-
 						case 'checkbox_group':
 							$return .= $this->parse_checkbox_group($field);
 						break;	
-
 						case 'radio_group':
 							$return .= $this->parse_radio_group($field);
 						break;	
-
 						default:
 						$return .= $this->parse_field($field);
-
-					}//switch					
+					}//switch				
 	
 				}//foreach
 				$return .= $this->submit_button;
@@ -141,12 +168,39 @@
 							$return .= $this->textarea($field);
 						break;																							
 						
+						case 'checkbox_group':
+							$return .= $this->parse_checkbox_group($field);
+						break;
+						
 						default:
 						$return .= $this->text_input($field);
 
 					}//switch
 					return '<div class="' . $field['wrapper_class'] . '">' . $return . '</div>';		
 			}//parse_field
+
+			public function parse_wrapper($group){
+					$defaults = array(
+						'id' => $group['label'] . '_wrapper'
+					); 
+					$group = array_merge($defaults, $group);	
+				if($group['required']){$class = 'wpg_input_group wpg_required_group';}
+				else {$class = 'wpg_input_group';}
+				
+				$return = '<div class="' . $class . '" id="' . $group['id'] . '">';
+				
+				if($group['label']){
+					$return .= '<p class="wpg_input_group_label"><strong>' . $group['label'] . '</strong></p>';
+				}
+				
+				foreach($group['fields'] as $field){
+					if($group['required']){$field['required'] = 'required';}
+					$return .= $this->parse_field($field);
+				}//foreach
+				
+				$return .= '</div>';
+				return $return;					
+			}//parse_wrapper
 			
 			public function parse_group($group){
 					$defaults = array(
@@ -389,4 +443,31 @@
 		
 	}//if(!class_exists('WP_Geek_Form')){
 	
+/*	if(!class_exists('WP_Geek_Input')){
+		class WP_Geek_Input extends WP_Geek_Form{
+			public function __construct($args=array()){
+				$defaults = array(
+					'id' => $field['name'],
+					'placeholder' => $field['label'],
+					'required' => '',
+					'other' => '',
+					'label' => '',
+					'class' => 'wpg_field',
+					'wrapper_class' => false,
+					'type' => 'text',
+					'value' => '',
+					'data' => false
+				); 
+				
+				$args = array_merge($defaults, $args);				
+				//make each variable available to read
+				foreach($args as $key => $value){
+					$this->$key = $value;
+				}
+				
+								
+			}//__construct
+						
+		}
+	}//if(!class_exists('WP_Geek_Input')){*/
 ?>

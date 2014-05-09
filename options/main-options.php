@@ -8,7 +8,12 @@
 					'menu_slug' => 'wp_geek_admin',
 					'menu_type' => 'menu',
 					'page_title' => 'WordPress Geek Options',
-					'data' => array('logo', 'icon'),
+					'data' => array( //include names of all fields here
+						'logo',
+						'icon',
+						'load_bootstrap',
+						'post_types'
+						),
 					'options_name' => 'wpg_options'
 				);
 			
@@ -35,8 +40,44 @@
 					'type' => 'upload',
 					'value' => $this->option('icon')
 				);
+				
+				$load_bootstrap = array(
+					'name' => 'load_bootstrap',
+					'label' => 'Load Bootstrap: ',
+					'type' => 'checkbox',
+					'value' => $this->option('load_bootstrap'),
+					'check_value' => 'yes'
+				);
+
+				$slideshow = array(
+					'name' => 'post_types[]',
+					'label' => 'Load Bootstrap: ',
+					'type' => 'checkbox',
+					'value' => $this->option('load_bootstrap'),
+					'check_value' => 'yes'
+				);				
+
+				$post_types = array(
+					'post_types[]' => 'Slideshows',
+					'post_types[]' => 'Gallery',
+				);	
+																
+					
+				$post_types_group = array(
+					'type' => 'checkbox_group',
+					'label' => 'Post Types',
+					'id' => 'post_types',
+					'options' => $post_types
+				);			
 			
-				$fields = array($logo, $icon);
+				$features_group = array(
+					'type' => 'group',
+					'label' => 'Features: ',
+					'id' => 'features_group',
+					'fields' => array($load_bootstrap, $post_types_group)
+				);		
+					
+				$fields = array($logo, $icon, $features_group);
 				$formargs = array('fields' => $fields);
 				$form = new WP_Geek_Form($formargs);
 				
