@@ -42,6 +42,34 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
         echo $after_title; 
 		
 		if($this->subhead){ ?><h4><?php echo $this->subhead; ?></h4><?php }
+
+		$queryargs = array(
+			'post_type' => 'post',
+			'posts_per_page' => $instance['number']
+		); 
+		 
+		$query = new WP_Query($queryargs);		
+
+            global $post;
+                  while ( $query->have_posts() ) {
+                    $query->the_post();
+					$before_post_title = apply_filters('wpg_before_recent_post_title', '<a href="' . get_permalink() . '">');
+					$after_post_title =  apply_filters('wpg_before_recent_post_title', '</a>');
+					 ?>
+                    
+                    <div class="excerpt">
+                    <h4 class="recent_post_title"><?php echo $before_post_title; the_title(); echo $after_post_title; ?></h4>
+                    <p class="recent_post_date">Posted <?php the_date(); ?></p>
+	                    <?php the_excerpt(); ?>
+
+                    <div class="clear"></div>
+                    
+                    <p class="readmore"><a href="<?php echo $link; ?>"><?php echo $instance['readmore']; ?></a></p>	
+                                       
+                 </div>
+            <?php	  } //endwhile
+                // Reset Post Data
+                wp_reset_postdata();		
 				
 		if($this->thumb){ 
 			$img = wp_get_attachment_image_src($this->thumb, $this->size); // returns an array
@@ -100,6 +128,24 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
 			'value' => $instance['subhead'],
 			'class' => 'widefat'
 		);
+
+		$custom_text = array(
+			'type' => 'textarea',
+			'name' => $this->get_field_name('custom_text'),
+			'label' => 'Custom Excerpt: ',
+			'id' => $this->get_field_id('custom_text'),
+			'value' => $instance['custom_text'],
+			'class' => 'widefat'
+		);		
+
+		$number = array(
+			'name' => $this->get_field_name('number'),
+			'label' => 'Number to show (-1 to show all): ',
+			'placeholder' => '-1',
+			'id' => $this->get_field_id('number'),
+			'value' => $instance['number'],
+			'class' => 'widefat'
+		);		
 		
 		$link = array(
 			'type' => 'content_selector',
@@ -168,7 +214,7 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
 			'type' => 'group'
 		);
 
-		$fields = array($title, $subhead, $link, $link_title, $readmore, $imagegroup);
+		$fields = array($title, $subhead, $custom_text, $number, $link, $link_title, $readmore, $imagegroup);
 		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
 		
 		$form = new WP_Geek_Form($formargs);
