@@ -226,5 +226,4 @@ function register_wp_Geek_Images_widget() {
     register_widget('wp_Geek_Widget_Images');
 }
 add_action('widgets_init', 'register_wp_Geek_Images_widget');
-
 ?>
