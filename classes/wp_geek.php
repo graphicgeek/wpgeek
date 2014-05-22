@@ -10,6 +10,7 @@ if(!class_exists('WP_Geek')){
 			add_action('admin_init', array(self::instance(), 'admin_styles'));
 			add_action('init', array(self::instance(), 'register_scripts'));
 			add_action('init', array(self::instance(), 'styles'));
+			add_shortcode( 'sub_page_list',  array(self::instance(), 'sub_page_list') );
 		}
 	
 		public static function instance(){
@@ -216,10 +217,28 @@ if(!class_exists('WP_Geek')){
 						
 		}//img_dimensions
 		
+		public static function sub_page_list($atts, $content=""){
+			global $post;
+			extract( shortcode_atts( array(
+					'child_of' => 'ID',
+					'title_li' => '',
+					'echo' => 0
+				), $atts ) );			
+			
+			
+			$args = array(
+				'child_of' => $post->$child_of,
+				'title_li' => $title_li,
+				'echo' => $echo
+			); 		
+		
+			return	'<ul class="wpg_sub_page_list"><li>' . get_the_title($post->$child_of) . ': </li>' . wp_list_pages($args) . '</ul>';
+				
+		}//sub_page_list
+		
 	}//WP_Geek
 	
 	WP_Geek::init();
 
-	
 }//if(!class_exists('WP_Geek'))
 ?>
