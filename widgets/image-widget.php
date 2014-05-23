@@ -67,7 +67,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			 else { $style ='';}
 			 
 			if($this->link){ ?> <a href="<?php echo $this->link; ?>" <?php echo $target . $link_class; ?>> <?php } ?>
-				<img<?php echo $style; ?> class="widget_thumb" src="<?php echo $img[0]; ?>" alt="<?php echo $alt; ?>" <?php WP_Geek::img_dimensions($img); ?> />
+				<span itemscope itemtype="https://schema.org/WebPageElement"><img<?php echo $style; ?> class="widget_thumb" itemprop="photo" src="<?php echo $img[0]; ?>" alt="<?php echo $alt; ?>" <?php WP_Geek::img_dimensions($img); ?> /></span>
 		<?php if($this->link){ ?></a> <?php } 
 		}//if($thumb)
 
