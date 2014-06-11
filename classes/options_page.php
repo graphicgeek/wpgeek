@@ -18,23 +18,26 @@
 				);
 				
 				$args = array_merge($defaults, $args); //merge defaults with user inputs
-				
+				//error_log('Args: ' . print_r($args, true));
 				//make values easily available	
 				foreach($args as $key => $value){
 					$this->$key = $value;			
 				}//foreach	
 				
 				if($this->options_name){
+					$this->options = get_option($this->options_name); 
 					
-					$options = get_option($this->options_name); 
-	
+/*	error_log('data before- ' . print_r($this->data, true));
 					if(is_array($options)){
-						foreach($options as $key => $data){
-							$this->data[$key] = $data;
+						foreach($options as $key => $value){
+							if($key){
+								//error_log('key ' . $key . ' data ' . $data);
+							$this->options[$key] = $value;
+							}
 						}//foreach							
 					}//if
 				
-				
+				error_log('data after- ' . print_r($this->data, true));*/
 				}							
 				
 			}//__construct
@@ -81,18 +84,24 @@
 				}
 				
 				if(!is_array($this->data)){ return false; }
+			//	error_log('post - ' . print_r($_POST, true));
+				
 				
 				foreach($this->data as $data){
-					$this->data[$data] = $_POST[$data];
+					
+					$this->options[$data] = $_POST[$data];
+					
+					//error_log('post data ' . $_POST[$data]);
+					
 				}//foreach
 				
-				update_option($this->options_name, $this->data);
+				update_option($this->options_name, $this->options);
 										
 			}//update
 			
 			public function option($key){
-				if(isset($this->data[$key])){
-					return $this->data[$key];
+				if(isset($this->options[$key])){
+					return $this->options[$key];
 				}
 				return false;
 			}

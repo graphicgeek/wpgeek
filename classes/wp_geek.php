@@ -81,9 +81,10 @@ if(!class_exists('WP_Geek')){
 			}//if($this->options['logo_svg'])
 			
 			if($img){
-				$logo = '<span class="wpg_logo_box" itemscope itemtype="http://schema.org/Organization">
-				<a itemprop="url" href="' . home_url() . '"><img itemprop="logo" class="wpg_logo" src="' . $img[0] . '" alt="logo" />' . self::logo_tagline(false) . '</a>
-				</span>';		
+				if(self::option('logo_custom_link')){ $link_open = '<a href="' . self::option('logo_custom_link') . '" target="_blank">'; }
+				else { $link_open = '<a itemprop="url" href="' . home_url() . '">'; }
+				
+				$logo = '<span class="wpg_logo_box" itemscope itemtype="http://schema.org/Organization">' . $link_open . '<img itemprop="logo" class="wpg_logo" src="' . $img[0] . '" alt="logo" />' . self::logo_tagline(false) . '</a></span>';		
 			}//if($img)
 			
 			if($echo){ echo apply_filters('wpg_logo',$logo); }

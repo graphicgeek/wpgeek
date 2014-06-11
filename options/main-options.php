@@ -10,6 +10,7 @@
 					'page_title' => 'WordPress Geek Options',
 					'data' => array( //include names of all fields here
 						'logo',
+						'logo_custom_link',
 						'icon',
 						'load_bootstrap',
 						'post_types'
@@ -18,6 +19,8 @@
 				);
 			
 			public function __construct(){
+				
+				error_log('custom link - ' . $this->option('logo_custom_link'));
 				parent::__construct($this->args);
 				
 			}//__construct		
@@ -33,6 +36,20 @@
 					'type' => 'upload',
 					'value' => $this->option('logo')
 				);	
+
+				$logo_custom_link = array(
+					'name' => 'logo_custom_link',
+					'id' => 'logo_custom_link',
+					'label' => 'Custom Link: ',
+					'value' => $this->option('logo_custom_link')
+				);
+				
+				$logo_group = array(
+					'type' => 'group',
+					'label' => 'Logo: ',
+					'id' => 'logo_group',
+					'fields' => array($logo, $logo_custom_link)
+				);				
 				
 				$icon = array(
 					'name' => 'icon',
@@ -77,7 +94,7 @@
 					'fields' => array($load_bootstrap, $post_types_group)
 				);		
 					
-				$fields = array($logo, $icon, $features_group);
+				$fields = array($logo_group, $icon, $features_group);
 				$formargs = array('fields' => $fields);
 				$form = new WP_Geek_Form($formargs);
 				

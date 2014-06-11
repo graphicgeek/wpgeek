@@ -30,6 +30,7 @@ require_once WP_GEEK_OPTIONS . '/main-options.php';
 
 //widgets
 require_once WP_GEEK_WIDGETS . '/image-widget.php';
+require_once WP_GEEK_WIDGETS . '/recent-posts.php';
 
 foreach(get_declared_classes() as $class){			
 	if(is_subclass_of($class,'WP_Geek')){
