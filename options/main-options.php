@@ -75,8 +75,8 @@
 				);				
 
 				$post_types = array(
-					'post_types[]' => 'Slideshows',
-					'post_types[]' => 'Gallery',
+					'Slideshows',
+					'Gallery',
 				);	
 																
 					
@@ -94,7 +94,7 @@
 					'fields' => array($load_bootstrap, $post_types_group)
 				);		
 					
-				$fields = array($logo_group, $icon, $features_group);
+				$fields = array($logo_group, $icon, $post_types_group, $features_group);
 				$formargs = array('fields' => $fields);
 				$form = new WP_Geek_Form($formargs);
 				

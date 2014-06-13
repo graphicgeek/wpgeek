@@ -217,6 +217,19 @@ if(!class_exists('WP_Geek')){
 						
 		}//img_dimensions
 		
+		public static function load_bootstrap($js=true, $css=true){
+			if($js){
+				$bootstrap = '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js';
+				wp_register_script('bootstrap', apply_filters('wpg_bootstrap_url', $bootstrap), array('jquery'));	
+				wp_enqueue_script('bootstrap');
+			}
+			if($css){
+				$bootstrap_css = '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css';
+				wp_register_style( 'bootstrap_css', apply_filters('wpg_bootstrap_css',$bootstrap_css));
+				wp_enqueue_style('bootstrap_css');
+			}
+		}//load_bootstrap
+		
 	}//WP_Geek
 	
 	WP_Geek::init();

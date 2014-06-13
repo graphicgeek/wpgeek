@@ -62,33 +62,32 @@
 			}//display
 			
 			public function fields($return=''){
+				
+				$field_types = array(
+					'wrapper',
+					'group',
+					'checkbox_group',
+					'radio_group',
+				);
 
 				foreach($this->fields as $field){
-
-					switch($field['type']){
-						case 'wrapper':
-							$return .= $this->parse_wrapper($field);
-						break;						
-						case 'group':
-							$return .= $this->parse_group($field);
-						break;
-						case 'checkbox_group':
-							$return .= $this->parse_checkbox_group($field);
-						break;	
-						case 'radio_group':
-							$return .= $this->parse_radio_group($field);
-						break;	
-						default:
-						$return .= $this->parse_field($field);
-					}//switch				
+	
+					if(in_array($field['type'], $field_types)){
+						$function = 'parse_' . $field['type'];
+					} else {
+						$function = 'parse_field';
+					}
+					
+					$return .= $this->$function($field);					
 	
 				}//foreach
+				
 				$return .= $this->submit_button;
+				
 				return $return;
 			}//fields
 			
-			public function parse_field($field){
-
+			public function prepare($field){
 					$defaults = array(
 						'id' => $field['name'],
 						'placeholder' => $field['label'],
@@ -122,60 +121,38 @@
 						$field['wrapper_class'] .= ' wpg_required_input'; 
 						$field['required'] = ' required';}
 
-					if($field['label']){$field['label'] = '<label>' . $field['label'] . '</label>';}
+					if($field['label']){$field['label'] = '<label>' . $field['label'] . '</label>';}	
+					
+					return	$field;		
+			}//prepare
+			
+			public function parse_field($field){
+				
+					$field = $this->prepare($field);
 
 					$return = '';
 
-					switch($field['type']){
-						
-						case 'content':
-							$return .= $field['content'];
-						break;
-						
-						case 'select':
-							$return .= $this->select($field);
-						break;
-	
-						case 'content_selector':
-							$return .= $this->content_select($field);
-						break;	
-						
-						case 'image_size_select':
-							$return .= $this->image_size_selector($field);
-						break;				
+					$field_types = array(
+						'content',
+						'select',
+						'content_selector',
+						'image_size_selector',
+						'phone',
+						'checkbox',
+						'radio',
+						'email',
+						'upload',
+						'textarea'
+					);
+					
+					if(in_array($field['type'], $field_types)){
+						$function =  $field['type'];
+					} else {
+						$function = 'text';
+					}
+					
+					$return .= $this->$function($field);		
 
-						case 'phone':
-							$return .= $this->phone($field);
-						break;	
-						
-						case 'checkbox':
-							$return .= $this->checkbox($field);
-						break;	
-
-						case 'radio':
-							$return .= $this->radio($field);
-						break;													
-						
-						case 'email':
-							$return .= $this->email_input($field);
-						break;	
-
-						case 'upload':
-							$return .= $this->upload_input($field);
-						break;	
-	
-						case 'textarea':
-							$return .= $this->textarea($field);
-						break;																							
-						
-						case 'checkbox_group':
-							$return .= $this->parse_checkbox_group($field);
-						break;
-						
-						default:
-						$return .= $this->text_input($field);
-
-					}//switch
 					return '<div class="' . $field['wrapper_class'] . '">' . $return . '</div>';		
 			}//parse_field
 
@@ -230,6 +207,8 @@
 						'id' => $group['label'] . '_group'
 					); 
 					$group = array_merge($defaults, $group);	
+					if(!$group['name']){$group['name'] = $group['id'];}
+
 				
 				if($group['required']){$class = 'wpg_checkbox_group wpg_required_group';}
 				else {$class = 'wpg_checkbox_group';}
@@ -244,16 +223,26 @@
 				}
 				$field = array('type'=>'checkbox');
 				
-				foreach($group['options'] as $name => $option){
+				$field['name'] = $group['name'] . '[]';
+				
+				$count = 1;
+				
+				foreach($group['options'] as $option){
 					$field['label'] = $option;
 					$field['check_value'] = $option;
-					$field['name'] = $name;
+					$field['value'] = $option;
+					error_log('option: ' . $option);
+					
+					$field['id'] = $group['name'] . '_' . $count;
+					
+					$count++;
+					
 					$return .= $this->parse_field($field);
 				}//foreach
 				
 				$return .= '</div>';
 				return $return;				
-			}//parse_checkbox_group
+			}//checkbox_group
 
 			public function parse_radio_group($group){
 					$defaults = array(
@@ -293,7 +282,7 @@
 			}//select	
 		
 			
-			public function text_input($field){
+			public function text($field){
 				
 				if($field['type']=='date'){
 					$field['type']='text';
@@ -302,7 +291,7 @@
 				
 				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" type="' . $field['type'] . '" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
 				return $this->before_field . $return . $this->after_field;	
-			}//	text_input	
+			}//	text	
 			
 			public function textarea($field){
 				
@@ -310,7 +299,7 @@
 				return $this->before_field . $return . $this->after_field;	
 			}//	textarea	
 						
-			public function upload_input($field){
+			public function upload($field){
 					$defaults = array(
 						'upload_type' => 'image',
 						'thumbsize' => 'thumbnail',
@@ -351,7 +340,7 @@
 					}
 		
 				return $field['label'] . $return;	
-			}//	upload_input				
+			}//	upload				
 			
 			public function email_input($field){
 				$return = $field['label'] . '<input ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="wpg_email_input ' . $field['class'] . '" type="email" name="' . $field['name']  . '" value="' . $field['value'] . '" '. $field['placeholder'] .  $field['other'] . $field['data'] . ' />';			
@@ -373,13 +362,13 @@
 				return $this->before_field . $return . $this->after_field;			
 			}//	radio										
 			
-			public function content_select($field){
+			public function content_selector($field){
 				$return = $field['label'] . '<select ' . $field['required'] . ' id="' . sanitize_html_class($field['id']) . '" class="' . $field['class'] . '" name="' . $field['name']  . '"'.  $field['other'] . $field['data'] . ' >';
 				$return .= self::content_options_list($field['value']);
 				$return .= '</select>';
 				
 				return $this->before_field . $return . $this->after_field;					
-			}//content_select
+			}//content_selector
 			
 			public static function content_options_list($id=false){
 				

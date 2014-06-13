@@ -64,7 +64,7 @@
 				if (!current_user_can($this->capability)){ wp_die('You do not have sufficient permissions to access this page.'); }		
 				
 				if(isset($_POST['wpg_submit'])){ $this->update(); }	
-												
+																
 				$form = '<div class="wrap"><form id="wp_geek_options_form" method="post">';
 					$form .= '<input type="hidden" name="wp_geek_nonce_name" id="wp_geek_nonce_name" value="' . wp_create_nonce( 'wp_geek_nonce' . plugin_basename(__FILE__) ) . '" />';
 					$form .= '<h1>' . $this->page_title . '</h1><hr />';
@@ -89,6 +89,10 @@
 				
 				foreach($this->data as $data){
 					
+/*					if(is_array($_POST[$data])){
+						$this->options[$data] = 
+					}*/
+										
 					$this->options[$data] = $_POST[$data];
 					
 					//error_log('post data ' . $_POST[$data]);

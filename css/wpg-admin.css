@@ -1,12 +1,38 @@
-#wp_geek_options_form .wpg_upload_field{
+#wp_geek_options_form .wpg_upload_field,
+#wp_geek_options_form .wpg_text_field,
+#wp_geek_options_form .wpg_input_group,
+#wp_geek_options_form .wpg_checkbox_group{
 	display:inline-block;	
 	border: 1px solid #ccc;
-	padding: 5px;
+	padding: 10px 15px;
 	margin: 5px;
+	vertical-align:top;
+	background:#fff;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;	
 }
 
-#wp_geek_options_form #wpg_form_submit{
+#wp_geek_options_form #wpg_form_submit,
+#wp_geek_options_form .wpg_input_group .wpg_upload_field{
 	display:block;	
+}
+
+#wp_geek_options_form .wpg_input_group .wpg_text_field,
+#wp_geek_options_form .wpg_input_group .wpg_upload_field{
+	padding: 5px 10px;
+}
+
+#wp_geek_options_form label,
+#wp_geek_options_form .wpg_input_group_label strong,
+#wp_geek_options_form .wpg_checkbox_group_label strong {
+	font-size:14px;
+	font-weight:bold;	
+}
+
+#wp_geek_options_form .wpg_input_group label,
+#wp_geek_options_form .wpg_checkbox_group label{
+	font-weight:normal;
 }
 
 .wpg_delete{
@@ -24,4 +50,31 @@ padding: 3px;;
 	content:'';
 	display:block;
 	clear:both;	
+}
+
+input,
+button{
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+#wp_geek_options_form button,
+#wp_geek_options_form input[type="button"],
+#wp_geek_options_form input[type="reset"],
+#wp_geek_options_form input[type="submit"]{
+	background: #ACAC37;
+	border: none;
+	padding: 5px 10px;
+	margin:10px 5px;
+	cursor:pointer;
+	color: #fff;	
+}
+
+#wp_geek_options_form button:hover,
+#wp_geek_options_form input[type="button"]:hover,
+#wp_geek_options_form input[type="reset"]:hover,
+#wp_geek_options_form input[type="submit"]:hover{
+	border-right:1px solid #666666;
+	border-bottom:1px solid #666666;
 }
