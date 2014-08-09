@@ -212,7 +212,7 @@ class wp_Geek_Widget_Images extends WP_Widget {
 			'type' => 'group'
 		);
 
-		$fields = array($title, $subhead, $before_image, $after_image, $lightbox, $link, $link_title, $readmore, $imagegroup);
+		$fields = array($title, $subhead, $before_image, $after_image, $lightbox, $link, $customlink, $link_title, $readmore, $imagegroup);
 		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
 		
 		$form = new WP_Geek_Form($formargs);
