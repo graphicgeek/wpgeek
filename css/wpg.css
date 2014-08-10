@@ -1,3 +1,15 @@
 .widget_thumb{
 	height:auto;	
 }
+
+.wpg_video_lightbox{
+	display:block;
+	position:relative;	
+}
+
+.wpg_video_lightbox:after{
+	content:url(images/play.png);	
+	position:absolute;
+	left:50%; top:50%;
+	margin:-35px 0 0 -50px;
+}
