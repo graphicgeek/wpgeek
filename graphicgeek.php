@@ -25,7 +25,8 @@ require_once WP_GEEK_ClASSES . '/forms.php';
 require_once WP_GEEK_ClASSES . '/options_page.php';
 require_once WP_GEEK_ClASSES . '/image_sizes.php';
 require_once WP_GEEK_ClASSES . '/video.php';
-
+require_once WP_GEEK_ClASSES . '/meta.php';
+require_once WP_GEEK_ClASSES . '/sidebar.php';
 //option pages
 require_once WP_GEEK_OPTIONS . '/main-options.php';
 
@@ -35,8 +36,7 @@ require_once WP_GEEK_WIDGETS . '/youtube-widget.php';
 require_once WP_GEEK_WIDGETS . '/recent-posts.php';
 
 foreach(get_declared_classes() as $class){			
-	if(is_subclass_of($class,'WP_Geek')){
-		
+	if(is_subclass_of($class,'WP_Geek')){		
 		$thisclass = new $class();
 		add_action('plugins_loaded', array($thisclass, 'add_actions'));		 
 	}//if(is_subclass_of
