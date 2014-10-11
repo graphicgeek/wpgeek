@@ -16,9 +16,11 @@
 			}//add_actions
 
 			public function register(){
+				error_log('register widgets');
 				$this->widget_areas = apply_filters('wpg_widget_areas', $this->widget_areas);
-
+//error_log(print_r($this->widget_areas, true));
 				foreach ($this->widget_areas as $id => $info) {
+
 					$sidebar = array(
 						'name'          => $info['name'],
 						'id'            => $id,
@@ -30,13 +32,16 @@
 					);
 					$sidebar =  apply_filters('wpg_register_sidebar', $sidebar);//filter for all sidebars
 					$sidebar =  apply_filters('wpg_register_' . $id, $sidebar);//filter for this sidebar
+
+					//error_log(print_r($sidebar, true));
+
 					register_sidebar( $sidebar );					
 				}//foreach
 			}//register
 
 			public function sidebar(){
 				$settings = new wpgSettingsMeta();
-				//$settings->setdata();
+				$settings->setdata();
 			 ?>
 				<div id="wpg_sidebar">
 				<?php dynamic_sidebar($settings->show_sidebar); ?>

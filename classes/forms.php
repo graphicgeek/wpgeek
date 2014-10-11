@@ -31,6 +31,13 @@
 		*/
 
 		class WP_Geek_Form extends WP_Geek{
+
+			public $function_list = array(
+					'wrapper',
+					'group',
+					'checkbox_group',
+					'radio_group'
+				);
 			
 			public function __construct($args=array()){
 				$defaults = array(
@@ -64,26 +71,17 @@
 			public function fields($return=''){
 
 				foreach($this->fields as $field){
+					$parse = 'parse_field';
+					if(in_array($field['type'], $this->function_list)){
+						$parse = 'parse_' . $field['type'];
+					}
 
-					switch($field['type']){
-						case 'wrapper':
-							$return .= $this->parse_wrapper($field);
-						break;						
-						case 'group':
-							$return .= $this->parse_group($field);
-						break;
-						case 'checkbox_group':
-							$return .= $this->parse_checkbox_group($field);
-						break;	
-						case 'radio_group':
-							$return .= $this->parse_radio_group($field);
-						break;	
-						default:
-						$return .= $this->parse_field($field);
-					}//switch				
+					$return .= $this->$parse($field);
 	
 				}//foreach
+
 				$return .= $this->submit_button;
+				
 				return $return;
 			}//fields
 			
