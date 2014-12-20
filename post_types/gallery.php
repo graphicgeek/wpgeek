@@ -9,8 +9,9 @@ if(!class_exists('wpg_Gallery')){
 
 		}
 
-		public function actions(){
+		public function init(){
 			add_action( 'init', array($this, 'register'),0);
+			add_filter('the_content', array($this, 'content'));
 			//add_action( 'add_meta_boxes', array($this, 'add_meta_box') );
 		}
 
@@ -60,9 +61,35 @@ if(!class_exists('wpg_Gallery')){
 			register_post_type( $this->post_type, $args );
 		}//register
 
+		public function content($content){
+			if ( $this->post_type == get_post_type() ){
+				$content .= $this->display(false);
+			}
+			return $content;
+		}
+
+		public function display($echo=true){
+			wp_enqueue_script('wpg_scripts');
+			wp_enqueue_style('wpg_colorgox_styles');
+			$meta = new WP_Geek_metabox();
+            $meta->setdata();	
+            $gallery = '<div class="wpg_gallery row">';	
+            $grid = 4;
+            foreach (unserialize($meta->gallery_images) as $value){
+				$thumb = wp_get_attachment_image( $value, 'medium');  
+				$full = wp_get_attachment_image_src( $value, 'full');            	
+            	$gallery .= '<div class="col-md-' . $grid . '"><a href="' . $full[0] . '" class="wpg_lightbox">';
+            	$gallery .= $thumb;
+            	$gallery .= '</a></div>';
+            }	
+            $gallery .= '</div>';
+			if($echo){ echo $gallery; }
+			return $gallery;
+		}
+
 	}//class wpg_Gallery{
 	$gallery = new wpg_Gallery();
-	$gallery->actions();
+	$gallery->init();
 
 	class wpg_gallery_meta extends WP_Geek_metabox
 	{

@@ -22,3 +22,12 @@
 	left:50%; top:50%;
 	margin:-35px 0 0 -50px;
 }
+
+.wpg_gallery{
+	clear: both;
+}
+
+.wpg_gallery img{
+	max-width: 100%;
+	height: auto;
+}
