@@ -31,6 +31,12 @@ jQuery(document).ready(function($){
 			if($(this).data('upload_result')){settings.upload_result = $(this).data('upload_result')}
 		}
 
+		if(settings.allowMultiples){
+			var gallery_template = $('#gallery_img_template li').clone();
+			$('#gallery_img_template').remove();
+			$('.sortable').sortable();
+		}
+		
 		var file_frame;
 		this.click(function(event){
 			// Uploading files
@@ -53,9 +59,10 @@ jQuery(document).ready(function($){
 				if(settings.allowMultiples){
 					//handle multiple selections
 					var selection = file_frame.state().get('selection');
-					var template = $('<div class="wpg_gallery_image"><input type="hidden" name="wpg[gallery_images][]" /></div>');
+					//var template = $('<div class="wpg_gallery_image"><input type="hidden" name="wpg[gallery_images][]" /></div>');
 					selection.each(function(attachment){
-						var tag = template.clone();
+						var tag = gallery_template.clone();
+						console.log(tag);
 						if(attachment.attributes.sizes.thumbnail){
 							var url = attachment.attributes.sizes.thumbnail.url;
 						} else {

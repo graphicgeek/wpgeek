@@ -17,11 +17,38 @@ color: #fff;
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
 border-radius: 5px;
-padding: 3px;;
+padding: 3px;
+position: absolute;
+right: 5px;
+top: 5px;
 }
 
 .wpg_delete:after{
 	content:'';
 	display:block;
 	clear:both;	
+}
+
+.sortable.grid{
+	display: flex;
+}
+
+.sortable li{
+	cursor: move;
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin: 5px;
+	vertical-align: top;	
+	position: relative;
+	background: #ddd;
+}
+
+.sortable li img{
+	width: 150px;
+	height: auto;
+}
+
+.sortable.grid li{
+	display: inline-block;
+	display: flex;
 }

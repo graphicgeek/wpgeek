@@ -309,14 +309,15 @@
 			}//	textarea	
 						
 			public function upload_input($field){
+					wp_enqueue_media();
+					wp_enqueue_script('wpg_media_uploader');
+								
 					$defaults = array(
 						'upload_type' => 'image',
 						'thumbsize' => 'thumbnail',
 						'auto_initiate' => true
 					); 
 					$field = array_merge($defaults, $field);
-
-					error_log(print_r($field, true));
 					
 					if($field['upload_type'] == 'image'){
 						$return ='<div>';
@@ -339,14 +340,24 @@
 	        			$return .= ' >Upload ' . strip_tags($field['label']) . '</button>';
         			
 					} elseif($field['upload_type'] == 'gallery'){
-						$return ='<div>';
+						wp_enqueue_script('jquery-ui-sortable');
+						$return = '<div>';
 
-						foreach (unserialize($field['value']) as $value) {
-							$img = wp_get_attachment_image_src( $value, $field['thumbsize']);
-							$return .= '<div class="wpg_gallery_image"><span class="wpg_delete">X</span>';
-							$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '[]" value="' . $value . '">';
-				            $return .= '<img class="wpg_media_upload" src="' . $img[0] . '" /></div>';							
-						}
+						$return .= '<div id="gallery_img_template">
+										<li class="wpg_gallery_image">
+											<span class="wpg_delete">X</span>
+											<input type="hidden" name="wpg[gallery_images][]" />
+										</li>
+									</div>';
+						$return .= '<ul id="' . sanitize_html_class($field['name']) . '_result" class="sortable grid">';
+							foreach (unserialize($field['value']) as $value) {
+								$img = wp_get_attachment_image_src( $value, $field['thumbsize']);
+								$return .= '<li class="wpg_gallery_image"><span class="wpg_delete">X</span>';
+								$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '[]" value="' . $value . '">';
+					            $return .= '<img class="wpg_media_upload" src="' . $img[0] . '" /></li>';							
+							}
+						$return .= '</ul>';
+
 /*						if($field['value']) {
 				            $img = wp_get_attachment_image_src( $field['value'], $field['thumbsize']);
 				            $return .= '<span class="wpg_delete">X</span>';

@@ -79,9 +79,6 @@ if(!class_exists('wpg_Gallery')){
 		}//__construct
 
 		public function box_content(){
-			wp_enqueue_media();
-			wp_enqueue_script('wpg_media_uploader');
-
 			$fields = array(
 				'thumbnail' => array(
 					'label' => 'Thumbnail',
