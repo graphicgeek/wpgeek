@@ -46,7 +46,7 @@
 		
 			public function add_options(){
 				if(!$this->menu_slug){return;}
-				
+
 				$function = 'add_' . $this->menu_type . '_page';
 				
 				if($this->menu_type == 'submenu'){
@@ -90,7 +90,7 @@
 										
 			}//update
 			
-			public function option($key){
+			public static function option($key){
 				if(isset($this->data[$key])){
 					return $this->data[$key];
 				}

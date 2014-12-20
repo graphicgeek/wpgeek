@@ -17,6 +17,7 @@ define('WP_GEEK_CORE', WP_GEEK . '/core');
 define('WP_GEEK_ClASSES', WP_GEEK . '/classes');
 define('WP_GEEK_OPTIONS', WP_GEEK . '/options');
 define('WP_GEEK_WIDGETS', WP_GEEK . '/widgets');
+define('WP_GEEK_POST_TYPES', WP_GEEK . '/post_types');
 define('WP_GEEK_URI', plugins_url() . '/wpgeek');
 
 //Classes
@@ -33,7 +34,9 @@ require_once WP_GEEK_OPTIONS . '/main-options.php';
 //widgets
 require_once WP_GEEK_WIDGETS . '/image-widget.php';
 //require_once WP_GEEK_WIDGETS . '/youtube-widget.php';
-//require_once WP_GEEK_WIDGETS . '/recent-posts.php';
+require_once WP_GEEK_WIDGETS . '/recent-posts.php';
+
+require_once WP_GEEK_POST_TYPES . '/gallery.php';
 
 foreach(get_declared_classes() as $class){			
 	if(is_subclass_of($class,'WP_Geek')){		

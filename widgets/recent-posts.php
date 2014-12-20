@@ -15,7 +15,8 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
 		'link',
 		'customlink',
 		'maxwidth',
-		'link_title'
+		'link_title',
+		'post_type'
 	);
 	
     function wp_Geek_Widget_Recent_Posts(){
@@ -45,7 +46,7 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
 		if($this->subhead){ ?><h4><?php echo $this->subhead; ?></h4><?php }
 
 		$queryargs = array(
-			'post_type' => 'post',
+			'post_type' => $instance['post_type'],
 			'posts_per_page' => $instance['number']
 		); 
 		 
@@ -127,6 +128,16 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
 			'value' => $instance['subhead'],
 			'class' => 'widefat'
 		);
+		
+		if(!$instance['post_type']){ $instance['post_type'] = 'post';}
+		
+		$post_type = array(
+			'name' => $this->get_field_name('post_type'),
+			'label' => 'Post Type: ',
+			'id' => $this->get_field_id('post_type'),
+			'value' => $instance['post_type'],
+			'class' => 'widefat'
+		);		
 
 		$custom_text = array(
 			'type' => 'textarea',
@@ -213,7 +224,7 @@ class wp_Geek_Widget_Recent_Posts extends WP_Widget {
 			'type' => 'group'
 		);
 
-		$fields = array($title, $subhead, $number, $link, $customlink, $link_title, $readmore, $imagegroup);
+		$fields = array($title, $subhead, $post_type, $number, $link, $customlink, $link_title, $readmore, $imagegroup);
 		$formargs = array('fields' => $fields, 'submit_button' => '', 'before_field' => '<p>', 'after_field' => '</p>');						
 		
 		$form = new WP_Geek_Form($formargs);

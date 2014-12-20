@@ -7,6 +7,10 @@
 				'main-sidebar' => array(
 					'name' => 'Main Sidebar',
 					'description' => 'Default sidebar for normal pages'
+					),
+				'blog-sidebar' => array(
+					'name' => 'Blog Sidebar',
+					'description' => 'Default sidebar for single posts, archives, and blog pages'
 					)
 			);
 
@@ -16,7 +20,6 @@
 			}//add_actions
 
 			public function register(){
-				error_log('register widgets');
 				$this->widget_areas = apply_filters('wpg_widget_areas', $this->widget_areas);
 //error_log(print_r($this->widget_areas, true));
 				foreach ($this->widget_areas as $id => $info) {
@@ -40,14 +43,51 @@
 			}//register
 
 			public function sidebar(){
-				$settings = new wpgSettingsMeta();
-				$settings->setdata();
-			 ?>
-				<div id="wpg_sidebar">
-				<?php dynamic_sidebar($settings->show_sidebar); ?>
-				</div>
-			<?php }//sidebar
 
+				$classes= array('sidebar');
+
+				$class_list = '';
+
+				foreach (apply_filters('wpg_sidebar_class', $classes) as $class) {
+					$class_list .= $class . ' ';
+				}
+
+				if ( is_front_page() && is_home() ) {
+					$sidebar = 'blog-sidebar';
+				  // Default homepage
+				} elseif ( is_front_page() ) {
+					$sidebar = 'main-sidebar';
+				  // static homepage
+				} elseif ( is_home() ) {
+					$sidebar = 'blog-sidebar';
+				  // blog page
+				} else {
+				$sidebar = 'main-sidebar';
+				  //everything else
+				}
+
+	/*			if(is_archive()){
+					
+				} else {	
+					$settings = new wpgSettingsMeta();
+					$settings->setdata();
+					$sidebar = $settings->show_sidebar;
+				}*/
+				do_action('before_wpg_sidebar');
+			 ?>
+				<section id="wpg_sidebar" class="<?php echo $class_list; ?>">
+				<?php
+					do_action('before_wpg_widgets');
+				 	
+				 	dynamic_sidebar($sidebar);
+					
+					do_action('after_wpg_widgets');
+				  ?>
+				</section>
+			<?php
+				do_action('after_wpg_sidebar');
+			}//sidebar
+				
 		}//WP_Geek_sidebars
 	}//if(!class_exists('WP_Geek_sidebars'))
 	//

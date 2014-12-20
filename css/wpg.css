@@ -2,6 +2,15 @@
 	height:auto;	
 }
 
+.widget.wp_Geek_image{
+	text-align: center;
+}
+
+.after_widget_thumb,
+.before_widget_thumb{
+	text-align: left;
+}
+
 .wpg_video_lightbox{
 	display:block;
 	position:relative;	

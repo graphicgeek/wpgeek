@@ -54,6 +54,7 @@
 				$this->setdata();
 				$field['name'] = $this->key . '[' . $name . ']';
 				$field['value'] = $this->$name;
+				error_log(print_r($field, true));
 				$this->form->add_field($field);
 			}
 
@@ -90,7 +91,7 @@
 
 			public function add_boxes(){
 				foreach ($this->boxes as $box) {
-					add_meta_box( $box->id, $box->title, array($box, 'box'), $box->post_type, $box->context, $box->priority, $box->params );
+					add_meta_box( $box->id, $box->title, array($box, 'box'), $box->posttype, $box->context, $box->priority, $box->params );
 				}
 			}//add_boxes
 

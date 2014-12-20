@@ -30,14 +30,12 @@ jQuery(document).ready(function($){
 			if($(this).data('uploader_button_text')){settings.uploader_button_text = $(this).data('uploader_button_text')}
 			if($(this).data('upload_result')){settings.upload_result = $(this).data('upload_result')}
 		}
-				
-	
+
 		var file_frame;
 		this.click(function(event){
 			// Uploading files
 			file_frame = null;
-			
-		
+					
 			event.preventDefault();
 	 
 			// Create the media frame.
@@ -55,8 +53,18 @@ jQuery(document).ready(function($){
 				if(settings.allowMultiples){
 					//handle multiple selections
 					var selection = file_frame.state().get('selection');
+					var template = $('<div class="wpg_gallery_image"><input type="hidden" name="wpg[gallery_images][]" /></div>');
 					selection.each(function(attachment){
-						
+						var tag = template.clone();
+						if(attachment.attributes.sizes.thumbnail){
+							var url = attachment.attributes.sizes.thumbnail.url;
+						} else {
+							var url = attachment.attributes.sizes.full.url;
+						}
+						var result = '<img class="wpg_media_upload" src="' + url + '" />';
+						tag.append(result);
+						$('input', tag).val(attachment.attributes.id);
+						$(settings.upload_result).append(tag); //display image							
 					});	//selection.each			
 				} else {
 					//handle single image	

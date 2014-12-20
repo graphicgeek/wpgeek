@@ -23,7 +23,7 @@ if(!class_exists('WP_Geek')){
 			add_action( 'wp_head', array( $this, 'favicon' ) );
 		}//instance
 	
-		public function option($option){
+		public static function option($option){
 			if(!self::$options) { self::$options = get_option('wpg_options'); }
 			
 			if(!isset(self::$options[$option])){ return false; }
@@ -33,8 +33,8 @@ if(!class_exists('WP_Geek')){
 			
 		public function favicon() {
 
-			if($this->option('icon')){
-				echo '<link rel="Shortcut Icon" type="image/x-icon" href="'. wp_get_attachment_url($this->option('icon')) .'" />';
+			if(self::option('icon')){
+				echo '<link rel="Shortcut Icon" type="image/x-icon" href="'. wp_get_attachment_url(self::option('icon')) .'" />';
 			}
 		}//favicon
 		
@@ -43,7 +43,74 @@ if(!class_exists('WP_Geek')){
 			wp_register_script( 'wpg_media_uploader', WP_GEEK_URI . '/js/wpg-uploads.js', array('wpg_admin'), '1.0.0', true );
 			wp_register_script( 'wpg_widget_admin', WP_GEEK_URI . '/js/wpg-widget-admin.js', array('wpg_media_uploader'), '1.0.0', true );		
 			wp_register_style('wpg_admin_styles', WP_GEEK_URI . '/css/wpg-admin.css');	
+			wp_localize_script( 'wpg_admin', 'date_format', $this->js_date_format() );			
 		}
+
+		public function js_date_format() {
+			$php_format = get_option('date_format');
+		    $PHP_matching_JS = array(
+		            // Day
+		            'd' => 'dd',
+		            'D' => 'D',
+		            'j' => 'd',
+		            'l' => 'DD',
+		            'N' => '',
+		            'S' => '',
+		            'w' => '',
+		            'z' => 'o',
+		            // Week
+		            'W' => '',
+		            // Month
+		            'F' => 'MM',
+		            'm' => 'mm',
+		            'M' => 'M',
+		            'n' => 'm',
+		            't' => '',
+		            // Year
+		            'L' => '',
+		            'o' => '',
+		            'Y' => 'yy',
+		            'y' => 'y',
+		            // Time
+		            'a' => '',
+		            'A' => '',
+		            'B' => '',
+		            'g' => '',
+		            'G' => '',
+		            'h' => '',
+		            'H' => '',
+		            'i' => '',
+		            's' => '',
+		            'u' => ''
+		    );
+
+		    $js_format = "";
+		    $escaping = false;
+
+		    for($i = 0; $i < strlen($php_format); $i++)
+		    {
+		        $char = $php_format[$i];
+		        if($char === '\\') // PHP date format escaping character
+		        {
+		            $i++;
+		            if($escaping) $js_format .= $php_format[$i];
+		            else $js_format .= '\'' . $php_format[$i];
+		            $escaping = true;
+		        }
+		        else
+		        {
+		            if($escaping) { $js_format .= "'"; $escaping = false; }
+		            if(isset($PHP_matching_JS[$char]))
+		                $js_format .= $PHP_matching_JS[$char];
+		            else
+		            {
+		                $js_format .= $char;
+		            }
+		        }
+		    }
+
+		    return $js_format;
+		} //date_format_php_to_js
 
 		public function admin_styles(){
 			wp_enqueue_style('wpg_admin_styles');	
@@ -70,7 +137,7 @@ if(!class_exists('WP_Geek')){
 			
 			if(self::option('logo')){
 				$img = wp_get_attachment_image_src(self::option('logo'), apply_filters('wpg_logo_size', $size)); // returns an array
-			}//if($this->options['logo'])
+			}//if(self::options['logo'])
 			
 			if(self::option('logo_svg')){
 				global $is_IE;
@@ -79,7 +146,7 @@ if(!class_exists('WP_Geek')){
 					$img = wp_get_attachment_image_src( self::option('logo_svg'), $size);
 				}//if(($is_IE && self::browser_version() >= 9) || !$is_IE)
 				
-			}//if($this->options['logo_svg'])
+			}//if(self::options['logo_svg'])
 			
 			if($img){
 				$logo = '<span class="wpg_logo_box" itemscope itemtype="http://schema.org/Organization">

@@ -315,6 +315,8 @@
 						'auto_initiate' => true
 					); 
 					$field = array_merge($defaults, $field);
+
+					error_log(print_r($field, true));
 					
 					if($field['upload_type'] == 'image'){
 						$return ='<div>';
@@ -325,12 +327,43 @@
 	            		} else { 
 	            			$return .= '<span id="' . sanitize_html_class($field['name']) . '_result"></span>';
 	            		}//end if($field['value'])
-	
-			            $return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '" id="' . sanitize_html_class($field['name']) . '_id" value="' . $field['value'] . '">';
+						$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '" id="' . sanitize_html_class($field['name']) . '_id" value="' . $field['value'] . '">';
+			            
 		            	$return .= '</div>';            		
 	            		                    
-	        			$return .= '<button class="wpg_media_upload wpg_not_loaded" type="button" id="' . sanitize_html_class($field['name']) . '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '" >Upload ' . strip_tags($field['label']) . '</button>';
+	        			$return .= '<button class="wpg_media_upload wpg_not_loaded" type="button" id="' . sanitize_html_class($field['name']);
+	        			$return .= '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '"';
+	        			if($field['upload_type'] == 'gallery'){
+	        				$return .= '" data-multiples="true"';
+	        			}
+	        			$return .= ' >Upload ' . strip_tags($field['label']) . '</button>';
         			
+					} elseif($field['upload_type'] == 'gallery'){
+						$return ='<div>';
+
+						foreach (unserialize($field['value']) as $value) {
+							$img = wp_get_attachment_image_src( $value, $field['thumbsize']);
+							$return .= '<div class="wpg_gallery_image"><span class="wpg_delete">X</span>';
+							$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '[]" value="' . $value . '">';
+				            $return .= '<img class="wpg_media_upload" src="' . $img[0] . '" /></div>';							
+						}
+/*						if($field['value']) {
+				            $img = wp_get_attachment_image_src( $field['value'], $field['thumbsize']);
+				            $return .= '<span class="wpg_delete">X</span>';
+				            $return .= '<span id="' . sanitize_html_class($field['name']) . '_result"><img class="wpg_media_upload" src="' . $img[0] . '" /></span>';
+	            		} else { 
+	            			$return .= '<span id="' . sanitize_html_class($field['name']) . '_result"></span>';
+	            		}//end if($field['value'])
+						$return .= '<input class="wpg_media_id" type="hidden" name="' . $field['name']  . '" id="' . sanitize_html_class($field['name']) . '_id" value="' . $field['value'] . '">';
+			*/            
+		            	$return .= '</div>';            		
+	            		                    
+	        			$return .= '<button class="wpg_media_upload wpg_not_loaded" type="button" id="' . sanitize_html_class($field['name']);
+	        			$return .= '" data-uploader_button_text="Set Photo" data-uploader_title="Select an Image" data-auto-initiate="' . $field['auto_initiate'] . '"';
+	        			if($field['upload_type'] == 'gallery'){
+	        				$return .= '" data-multiples="true"';
+	        			}
+	        			$return .= ' >Upload ' . strip_tags($field['label']) . '</button>';
 					} else {
 						//for non-image uploads
 						$return ='<div>';
